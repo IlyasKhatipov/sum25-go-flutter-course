@@ -20,11 +20,9 @@ class ProfileCard extends StatelessWidget {
     Widget avatarChild;
 
     if (avatarUrl != null && avatarUrl!.isNotEmpty) {
-      // Используем Image.network с errorBuilder
       avatarChild = Image.network(
         avatarUrl!,
         fit: BoxFit.cover,
-        // Этот билдер сработает, когда тест вернет ошибку 400
         errorBuilder: (context, error, stackTrace) {
           return Center(
             child: Text(
@@ -37,14 +35,12 @@ class ProfileCard extends StatelessWidget {
             ),
           );
         },
-        // Можно добавить индикатор загрузки для красоты
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
           return const Center(child: CircularProgressIndicator());
         },
       );
     } else {
-      // Запасной вариант, если URL не предоставлен
       avatarChild = Center(
         child: Text(
           name.isNotEmpty ? name[0].toUpperCase() : '',
@@ -63,7 +59,6 @@ class ProfileCard extends StatelessWidget {
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: Theme.of(context).colorScheme.primary,
-          // Оборачиваем дочерний виджет в ClipOval, чтобы сделать его круглым
           child: ClipOval(
             child: SizedBox.fromSize(
               size: const Size.fromRadius(30),

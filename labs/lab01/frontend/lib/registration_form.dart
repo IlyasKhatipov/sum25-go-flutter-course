@@ -22,7 +22,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   void _submitForm() {
-    // Валидируем форму и если все в порядке, показываем SnackBar
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registration successful!')),
@@ -45,7 +44,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 key: const Key('name'),
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Имя',
+                  labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -65,7 +64,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
-                  // Проверка на null, пустоту и валидность email
                   if (value == null ||
                       value.isEmpty ||
                       !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
@@ -79,7 +77,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 key: const Key('password'),
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'Пароль',
+                  labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,

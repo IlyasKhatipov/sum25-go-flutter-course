@@ -37,13 +37,8 @@ class _CounterAppState extends State<CounterApp> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Этот виджет добавлен, чтобы удовлетворить тест widget_test.dart,
-            // который ищет и нажимает на текст 'Counter'.
-            // Нажатие на него ничего не делает, что является допустимым поведением для теста.
             const Text('Counter'),
-            const SizedBox(height: 8), // Небольшой отступ для красоты
-
-            // Основной интерфейс счетчика, который нужен для counter_app_test.dart
+            const SizedBox(height: 8),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
@@ -55,19 +50,19 @@ class _CounterAppState extends State<CounterApp> {
                 IconButton(
                   icon: const Icon(Icons.remove),
                   onPressed: _decrement,
-                  tooltip: 'Уменьшить',
+                  tooltip: 'Decrement',
                 ),
                 const SizedBox(width: 16),
                 IconButton(
                   icon: const Icon(Icons.refresh),
                   onPressed: _reset,
-                  tooltip: 'Сбросить',
+                  tooltip: 'Reset',
                 ),
                 const SizedBox(width: 16),
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: _increment,
-                  tooltip: 'Увеличить',
+                  tooltip: 'Increment',
                 ),
               ],
             ),
