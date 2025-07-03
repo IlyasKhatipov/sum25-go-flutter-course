@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'models/message.dart';
 import 'screens/chat_screen.dart';
 import 'services/api_service.dart';
 
@@ -15,17 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<ApiService>(
-          create: (_) => ApiService(),
-          dispose: (_, apiService) => apiService.dispose(),
-        ),
-        ChangeNotifierProvider<ChatProvider>(
-          create: (context) =>
-              ChatProvider(context.read<ApiService>())..loadMessages(),
-        ),
-      ],
+    return Provider<ApiService>(
+      create: (_) => ApiService(),
+      dispose: (_, apiService) => apiService.dispose(),
       child: MaterialApp(
         title: 'Lab 03 REST API Chat',
         theme: ThemeData(
@@ -51,72 +42,5 @@ class MyApp extends StatelessWidget {
         home: const ChatScreen(),
       ),
     );
-  }
-}
-
-class ChatProvider extends ChangeNotifier {
-  final ApiService _apiService;
-
-  List<Message> _messages = [];
-  bool _isLoading = false;
-  String? _error;
-
-  ChatProvider(this._apiService);
-
-  List<Message> get messages => _messages;
-  bool get isLoading => _isLoading;
-  String? get error => _error;
-
-  Future<void> _execute(Future<void> Function() action) async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
-    try {
-      await action();
-    } catch (e) {
-      _error = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> loadMessages() async {
-    await _execute(() async {
-      _messages = await _apiService.getMessages();
-      _messages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-    });
-  }
-
-  Future<void> createMessage(CreateMessageRequest request) async {
-    await _execute(() async {
-      final newMessage = await _apiService.createMessage(request);
-      _messages.insert(0, newMessage);
-    });
-    if (_error != null) throw ApiException(_error!);
-  }
-
-  Future<void> updateMessage(int id, UpdateMessageRequest request) async {
-    await _execute(() async {
-      final updatedMessage = await _apiService.updateMessage(id, request);
-      final index = _messages.indexWhere((m) => m.id == id);
-      if (index != -1) {
-        _messages[index] = updatedMessage;
-      }
-    });
-    if (_error != null) throw ApiException(_error!);
-  }
-
-  Future<void> deleteMessage(int id) async {
-    await _execute(() async {
-      await _apiService.deleteMessage(id);
-      _messages.removeWhere((m) => m.id == id);
-    });
-    if (_error != null) throw ApiException(_error!);
-  }
-
-  void clearError() {
-    _error = null;
-    notifyListeners();
   }
 }
