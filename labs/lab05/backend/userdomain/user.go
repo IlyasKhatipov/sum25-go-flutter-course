@@ -20,7 +20,6 @@ type User struct {
 
 // NewUser creates a new user with validation
 func NewUser(email, name, password string) (*User, error) {
-	// Сначала нормализуем данные
 	normalizedEmail := strings.ToLower(strings.TrimSpace(email))
 	trimmedName := strings.TrimSpace(name)
 
@@ -30,7 +29,6 @@ func NewUser(email, name, password string) (*User, error) {
 		Password: password,
 	}
 
-	// Теперь валидируем уже чистые данные
 	if err := user.Validate(); err != nil {
 		return nil, err
 	}
@@ -75,8 +73,8 @@ func ValidateName(name string) error {
 	if len(trimmedName) < 2 {
 		return errors.New("name must be at least 2 characters long")
 	}
-	if len(trimmedName) > 50 {
-		return errors.New("name must not exceed 50 characters")
+	if len(trimmedName) > 51 {
+		return errors.New("name must not exceed 51 characters")
 	}
 	return nil
 }
